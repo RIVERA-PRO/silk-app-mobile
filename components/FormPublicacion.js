@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import ImgPerfil from './ImgPerfil';
 export default function FormPublicacion() {
     const [modal, setModal] = useState(false);
     const [title, setTitle] = useState('');
@@ -77,6 +78,12 @@ export default function FormPublicacion() {
             Alert.alert(error);
         }
     };
+    const getCurrentDate = () => {
+        const date = new Date();
+        const options = { weekday: 'long', month: 'long', day: 'numeric' };
+        return date.toLocaleDateString(undefined, options);
+    };
+
     return (
 
 
@@ -85,7 +92,7 @@ export default function FormPublicacion() {
 
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-                    <AntDesign name="arrowleft" size={24} color="#fff" />
+                    <AntDesign name="arrowleft" size={24} color="#000" />
 
                 </TouchableOpacity>
 
@@ -98,14 +105,19 @@ export default function FormPublicacion() {
 
 
 
-                    {isLoading ? <ActivityIndicator style={styles.loader} size="large" color="#fff" /> : <Text style={styles.titleHeader}>Crear Publicacion</Text>}
+                    {isLoading ? <ActivityIndicator style={styles.loader} size="large" color="#000" /> : <Text style={styles.titleHeader}>Crear Publicacion</Text>}
                 </TouchableOpacity>
             </View>
 
             {userData ? (
                 <View style={styles.deFlexPerfil}>
-                    <Image source={{ uri: userData.photo }} style={styles.img} />
-                    <Text style={styles.titleHeader}>{userData.name}</Text>
+                    <View style={styles.imgBorder}>
+                        <Image source={{ uri: userData.photo }} style={styles.img} />
+                    </View>
+                    <View>
+                        <Text style={styles.textName}>{userData.name}</Text>
+                        <Text style={styles.dateText}>{getCurrentDate()}</Text>
+                    </View>
                 </View>
 
 
@@ -114,15 +126,16 @@ export default function FormPublicacion() {
             )}
 
             <View style={styles.formModal}>
-
                 <TextInput
                     placeholder="¿Qué estás pensando?"
-                    placeholderTextColor="#ffffff"
+                    placeholderTextColor='rgba(0, 0, 0, 0.7)'
                     value={description}
                     onChangeText={setDescription}
-                    style={[styles.inputDescripcion, { minHeight: 200, maxHeight: 200 }]}
+                    style={[styles.inputDescripcion, { minHeight: 100, maxHeight: 200 }]}
                     multiline={true}
+                    placeholderStyle={{ fontSize: 26 }} // Ajusta el tamaño de fuente aquí
                 />
+
 
 
                 <View style={styles.deFlexInputUrl}>
@@ -130,7 +143,7 @@ export default function FormPublicacion() {
                     <TextInput
                         placeholder="URL de la foto"
                         value={coverPhoto}
-                        placeholderTextColor="#ffffff"
+                        placeholderTextColor='rgba(0, 0, 0, 0.7)'
                         onChangeText={setCoverPhoto}
                         multiline={true}
                         style={[styles.inputUrl,]}
@@ -152,7 +165,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 10,
-        backgroundColor: '#0D0628',
+        backgroundColor: '#fff',
         marginTop: 10,
         paddingVertical: 20
 
@@ -169,7 +182,7 @@ const styles = StyleSheet.create({
         // Your modal styles
     },
     submitButton: {
-        backgroundColor: '#2474e1',
+        backgroundColor: '#1FC2D7',
         paddingHorizontal: 15,
         paddingVertical: 7,
         borderRadius: 100,
@@ -186,31 +199,39 @@ const styles = StyleSheet.create({
     },
 
     img: {
-        width: 40,
-        height: 40,
+        width: 50,
+        height: 50,
+        objectFit: 'cover',
         borderRadius: 100,
-        objectFit: 'cover'
+        borderColor: '#fff',
+        borderWidth: 2,
+        padding: 10,
+        margin: 2
+    },
+    imgBorder: {
+        backgroundColor: '#1FC2D7',
+        borderRadius: 100,
     },
     inputCrear: {
         borderColor: 'gray',
         borderWidth: 1,
         borderRadius: 50,
-        color: '#fff',
+        color: 'rgba(0, 0, 0, 0.7)',
         paddingVertical: 10,
         paddingLeft: 20,
         paddingRight: 80
     },
     inputCrearText: {
-        color: '#fff'
+        color: 'rgba(0, 0, 0, 0.7)',
     },
     modalContainer: {
-        backgroundColor: '#18072B',
+        backgroundColor: '#f2f2f2',
         height: '100%',
 
 
     },
     header: {
-        backgroundColor: '#0D0628',
+        backgroundColor: '#fff',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -227,33 +248,46 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 15
     },
+    textName: {
+        color: 'rgba(0, 0, 0, 0.7)',
+        fontSize: 18,
+        fontWeight: 'bold'
+    },
+    dateText: {
+        color: 'rgba(0, 0, 0, 0.7)',
+        fontSize: 13,
+    },
     deFlexPerfil: {
         flexDirection: 'row',
         alignItems: 'center',
         padding: 20,
-        gap: 10
+        gap: 10,
+        borderBottomColor: 'rgba(0, 0, 0, 0.2)',
+        borderBottomWidth: 0.4,
     },
     inputDescripcion: {
         padding: 20,
 
-        color: '#fff'
+        color: 'rgba(0, 0, 0, 0.7)',
 
     },
     deFlexInputUrl: {
         flexDirection: 'row',
-
         padding: 20,
         gap: 20,
-
         shadowColor: '#fff',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 4,
         elevation: 0.4,
+        borderBottomColor: 'rgba(0, 0, 0, 0.2)',
+        borderBottomWidth: 0.4,
+        borderTopColor: 'rgba(0, 0, 0, 0.2)',
+        borderTopWidth: 0.4,
 
     },
     inputUrl: {
-        color: '#fff',
+        color: 'rgba(0, 0, 0, 0.7)',
         width: '90%'
     }
 })

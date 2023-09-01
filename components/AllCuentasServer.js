@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Alert, TouchableOpacity, Clipboard } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Alert, TouchableOpacity, Image } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-
+import { useNavigation } from '@react-navigation/native';
 export default function AllCuentasServer() {
     const [loading, setLoading] = useState(true);
     const [users, setUsers] = useState([]);
-
+    const navigation = useNavigation();
     useEffect(() => {
         fetchUsers();
     }, []);
@@ -63,24 +63,23 @@ export default function AllCuentasServer() {
             {loading ? (
                 <ActivityIndicator style={styles.loader} size="large" color="#0000ff" />
             ) : (
-                <ScrollView>
-                    <Text style={styles.title}>{users.length} Usuarios registrados</Text>
+                <ScrollView horizontal={true}>
+
                     {users.map((user, index) => (
-                        <View key={index} style={styles.userContainer}>
-                            <View style={styles.deFlex}>
-                                <Text style={styles.textColorTitle}>Email:  <Text style={styles.textColor}>{user.mail}</Text></Text>
-                                <TouchableOpacity onPress={() => copyToClipboard(user.mail)}>
-                                    <AntDesign name="copy1" size={18} color='rgba(36, 116, 225,0.9)' />
-                                </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate('PerfilScreen', { user_id: user._id })}
+                        >
+                            <View key={index} style={styles.userContainer}>
+
+
+                                <Image source={{ uri: user.photo }} style={styles.img} />
+
+                                <Text style={styles.textColorTitle}> {user.name.slice(0, 14)}</Text>
+
                             </View>
-                            <View style={styles.deFlex}>
-                                <Text style={styles.textColorTitle}>Contraseña: <Text style={styles.textColor}>{user.password}</Text></Text>
-                                <TouchableOpacity onPress={() => copyToClipboard(user.password)}>
-                                    <AntDesign name="copy1" size={18} color='rgba(36, 116, 225,0.9)' />
-                                </TouchableOpacity>
-                            </View>
-                            <Text style={styles.textColorTitle}>{formatDate(user.createdAt)}</Text>
-                        </View>
+                        </TouchableOpacity>
+
+
                     ))}
 
                 </ScrollView>
@@ -91,20 +90,42 @@ export default function AllCuentasServer() {
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 20
+
+        backgroundColor: '#fff',
+        marginLeft: 10,
+        marginTop: 10,
+        marginBottom: 10,
+        shadowColor: 'rgba(0, 0, 0, 0.4)',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+        elevation: 10,
+        borderRadius: 10
+
 
     },
     loader: {
         marginTop: 20,
     },
     userContainer: {
-        backgroundColor: 'rgba(36, 116, 225,0.1)',
-        padding: 10,
-        margin: 10,
+
+
 
         borderRadius: 10,
         flexDirection: 'column',
-        gap: 7
+        gap: 7,
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: '#f2f2f2',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+        elevation: 5,
+        borderColor: '#1FC2D7',
+        borderWidth: 0.3,
+        marginLeft: 10,
+        marginTop: 10,
+        marginBottom: 10,
 
     },
     title: {
@@ -124,12 +145,17 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center'
     },
-    textColor: {
-        color: '#2474e1',
-        fontSize: 15
-    },
     textColorTitle: {
         color: 'rgba(0, 0, 0,0.6)',
-    }
+        fontSize: 15,
+        fontWeight: 'bold'
+    },
+
+    img: {
+        height: 140,
+        width: 130,
+        borderRadius: 10,
+        objectFit: 'cover'
+    },
 
 });

@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-
+import ImgPerfil from './ImgPerfil';
 export default function ButonFormPublicacion() {
     const [userData, setUserData] = useState(null);
     const navigation = useNavigation();
@@ -34,7 +34,8 @@ export default function ButonFormPublicacion() {
             >
                 {userData ? (
 
-                    <Image source={{ uri: userData.photo }} style={styles.img} />
+                    <ImgPerfil />
+
 
                 ) : (
                     <Image source={{ uri: 'https://w7.pngwing.com/pngs/247/564/png-transparent-computer-icons-user-profile-user-avatar-blue-heroes-electric-blue-thumbnail.png' }} style={styles.img} />
@@ -56,14 +57,21 @@ export default function ButonFormPublicacion() {
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
+
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         padding: 10,
-        backgroundColor: '#0D0628',
+        backgroundColor: '#fff',
         marginTop: 10,
-        paddingVertical: 20
+        paddingVertical: 20,
+        shadowColor: 'rgba(0, 0, 0, 0.4)',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+        elevation: 10,
+        margin: 10,
+        borderRadius: 10
 
     },
     createButton: {
@@ -81,7 +89,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         paddingVertical: 7,
         borderRadius: 100,
-        shadowColor: '#fff',
+        shadowColor: '#f2f2f2',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 4,
@@ -100,16 +108,16 @@ const styles = StyleSheet.create({
         objectFit: 'cover'
     },
     inputCrear: {
-        borderColor: 'gray',
-        borderWidth: 1,
+
         borderRadius: 50,
         color: '#fff',
         paddingVertical: 10,
         paddingLeft: 20,
-        paddingRight: 80
+        paddingRight: 80,
+        backgroundColor: 'rgba(36, 116, 225,0.1)',
     },
     inputCrearText: {
-        color: '#fff'
+        color: 'rgba(0, 0, 0, 0.6)',
     },
     modalContainer: {
         backgroundColor: '#18072B',

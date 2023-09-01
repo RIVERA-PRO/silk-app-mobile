@@ -27,7 +27,10 @@ export default function PerfilComponent() {
         <>
             {userData ? (
                 <View style={styles.contenedor}>
-                    <Image source={{ uri: userData.photo }} style={styles.img} />
+                    <View style={styles.imgBorder}>
+                        <Image source={{ uri: userData.photo }} style={styles.img} />
+                    </View>
+
                     <View style={styles.deColumn}>
                         <Text style={styles.textName}>{userData.name}</Text>
                         <Text style={styles.text}>{userData.mail.slice(0, 22)}</Text>
@@ -51,18 +54,26 @@ const styles = StyleSheet.create({
         padding: 20,
         gap: 10
     },
+    imgBorder: {
+        backgroundColor: '#1FC2D7',
+        borderRadius: 100,
+    },
 
     img: {
         height: 60,
         width: 60,
-        borderRadius: 100
+        borderRadius: 100,
+        borderColor: '#fff',
+        borderWidth: 2,
+        padding: 10,
+        margin: 3
     },
     text: {
-        color: "#ffff",
+        color: 'rgba(0, 0, 0, 0.7)',
         fontSize: 13
     },
     textName: {
-        color: "#ffff",
+        color: 'rgba(0, 0, 0, 0.7)',
         fontSize: 17,
         fontWeight: 'bold',
     },

@@ -50,6 +50,7 @@ export default function Login({ setIsLoggedIn }) {
             );
             navigation.navigate('Home');
             console.log("logueado")
+            console.log('Token:', response.data.token);
             setIsLoggedIn(true);
         } catch (error) {
             console.error('Error creating user:', error);

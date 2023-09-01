@@ -7,7 +7,8 @@ import axios from 'axios';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
-export default function AllPublicaciones() {
+import { useRoute } from '@react-navigation/native';
+export default function AllPublicacionesPerfil() {
     const [loading, setLoading] = useState(true);
     const [publicacion, setPublicacion] = useState([]);
     const navigation = useNavigation();
@@ -18,14 +19,18 @@ export default function AllPublicaciones() {
     const [selectedComments, setSelectedComments] = useState([]);
     const [commentInput, setCommentInput] = useState('');
     const [selectedPublication, setSelectedPublication] = useState(null);
-
+    const route = useRoute();
+    const { user_id } = route.params;
     const fetchUsers = () => {
         fetch('https://silk.onrender.com/publicacion', headers)
             .then(response => response.json())
             .then(data => {
+
                 // Invertir el orden de las publicaciones
-                const reversedPublicaciones = data.publicaciones.reverse();
+                const filteredPublicaciones = data.publicaciones.filter(pub => pub.user_id === user_id); // Filter posts by user_id
+                const reversedPublicaciones = filteredPublicaciones.reverse();
                 setPublicacion(reversedPublicaciones);
+                console.log("publicaciones por paramas", filteredPublicaciones)
                 // Fetch comments for each publication
                 const commentsPromises = reversedPublicaciones.map(pub => (
                     fetch(`https://silk.onrender.com/comments?chapter_id=${pub._id}`, headers)
@@ -92,7 +97,11 @@ export default function AllPublicaciones() {
         );
     };
 
-
+    useEffect(() => {
+        fetchUsers();
+        const interval = setInterval(fetchUsers, 60000);
+        return () => clearInterval(interval);
+    }, [user_id]);
 
     const addCommentToPublication = async (publicationId, commentText) => {
         try {

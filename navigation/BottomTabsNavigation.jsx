@@ -46,12 +46,17 @@ function BottomTabsNavigation() {
                 options={{
 
                     tabBarStyle: {
-                        backgroundColor: '#0D0628',
-                        height: 60,
+                        backgroundColor: '#fff',
+                        height: 65,
                         elevation: 0,
                         position: 'absolute',
-                        borderTopEndRadius: 30,
-                        borderTopLeftRadius: 30
+
+                        borderTopLeftRadius: 20,
+                        borderTopRightRadius: 20,
+                        borderTopColor: 'rgba(36, 116, 225,0.1)',
+                        borderTopWidth: 2,
+
+
                     },
                     activeTintColor: '#1FC2D7',
                     inactiveTintColor: '#9B9B9B',
@@ -89,12 +94,15 @@ function BottomTabsNavigation() {
                         </View>
                     ),
                     tabBarStyle: {
-                        backgroundColor: '#0D0628',
-                        height: 60,
+                        backgroundColor: '#fff',
+                        height: 65,
                         elevation: 0,
                         position: 'absolute',
-                        borderTopEndRadius: 30,
-                        borderTopLeftRadius: 30
+
+                        borderTopLeftRadius: 20,
+                        borderTopRightRadius: 20,
+                        borderTopColor: 'rgba(36, 116, 225,0.1)',
+                        borderTopWidth: 2,
                     },
                     activeTintColor: '#022a9b',
                     inactiveTintColor: '#9B9B9B',
@@ -108,12 +116,15 @@ function BottomTabsNavigation() {
                 options={{
 
                     tabBarStyle: {
-                        backgroundColor: '#0D0628',
-                        height: 60,
+                        backgroundColor: '#fff',
+                        height: 65,
                         elevation: 0,
                         position: 'absolute',
-                        borderTopEndRadius: 30,
-                        borderTopLeftRadius: 30
+
+                        borderTopLeftRadius: 20,
+                        borderTopRightRadius: 20,
+                        borderTopColor: 'rgba(36, 116, 225,0.1)',
+                        borderTopWidth: 2,
                     },
                     activeTintColor: '#1FC2D7',
                     inactiveTintColor: '#9B9B9B',

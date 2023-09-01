@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, Text, TouchableOpacity, Dimensions, ImageBackground, Image } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { useNavigation } from '@react-navigation/native';
 export default function ImgPerfil() {
     const [userData, setUserData] = useState(null);
-
+    const navigation = useNavigation();
     useEffect(() => {
         getUserData();
     }, []);
@@ -27,8 +27,15 @@ export default function ImgPerfil() {
         <>
             {userData ? (
 
-                <Image source={{ uri: userData.photo }} style={styles.img} />
 
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('PerfilScreen', { user_id: userData.user_id })}
+                    style={styles.imgBorder} >
+
+
+
+                    <Image source={{ uri: userData.photo }} style={styles.img} />
+                </TouchableOpacity>
 
 
             ) : (
@@ -50,10 +57,18 @@ const styles = StyleSheet.create({
     },
 
     img: {
-        height: 35,
-        width: 35,
+        width: 40,
+        height: 40,
+        objectFit: 'cover',
         borderRadius: 100,
-        objectFit: 'cover'
+        borderColor: '#fff',
+        borderWidth: 2,
+        padding: 10,
+        margin: 2
+    },
+    imgBorder: {
+        backgroundColor: '#1FC2D7',
+        borderRadius: 100,
     },
     text: {
         color: "#ffff",

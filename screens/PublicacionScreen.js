@@ -11,7 +11,7 @@ export default function PublicacionScreen() {
 
 const styles = StyleSheet.create({
     contenedor: {
-
+        backgroundColor: '#fff',
         height: '100%',
         flexDirection: 'column',
         justifyContent: 'space-between',

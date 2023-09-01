@@ -25,8 +25,13 @@ export default function Home() {
             <HeaderBlanco />
             <ScrollView>
                 <ImageBackground style={styles.contenedor}>
+
+
+                    <AllCuentasServer />
+
                     <ButonFormPublicacion />
                     <AllPublicaciones />
+
                 </ImageBackground>
                 <View style={styles.espacio}>
 
@@ -43,11 +48,12 @@ export default function Home() {
 
 const styles = StyleSheet.create({
     contenedor: {
-        backgroundColor: '#000',
+        backgroundColor: 'rgba(36, 116, 225,0.1)',
     },
     espacio: {
         height: 200,
-        backgroundColor: '#000',
-    }
+        backgroundColor: 'rgba(36, 116, 225,0.1)',
+    },
+
 
 });

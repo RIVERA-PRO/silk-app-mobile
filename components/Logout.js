@@ -28,7 +28,7 @@ export default function Logout() {
     return (
         <View>
             <TouchableOpacity onPress={handleLogout} style={styles.BtnLogou}>
-                <MaterialIcons name="logout" size={24} color="#fff" />
+                <MaterialIcons name="logout" size={24} color='rgba(0, 0, 0, 0.7)' />
                 <Text style={styles.social}>Logout</Text>
 
             </TouchableOpacity>
@@ -37,9 +37,9 @@ export default function Logout() {
 }
 const styles = StyleSheet.create({
     social: {
-        color: '#fff',
+        color: 'rgba(0, 0, 0, 0.7)',
         fontWeight: 'bold',
-        fontSize: 15
+        fontSize: 14
     },
     BtnLogou: {
         flexDirection: 'row',

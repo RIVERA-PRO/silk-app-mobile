@@ -66,7 +66,7 @@ export default function Header() {
                 </TouchableOpacity>
                 <InputSearch />
                 <TouchableOpacity onPress={toggleModal}>
-                    <EvilIcons name="navicon" size={24} color="#fff" />
+                    <EvilIcons name="navicon" size={24} color="#000" />
                 </TouchableOpacity>
             </View>
 
@@ -90,11 +90,11 @@ export default function Header() {
                     <Text style={styles.dateText}>{getCurrentDate()}</Text>
                     <View style={styles.navBtns}>
                         <TouchableOpacity onPress={goToHome} style={styles.btnNav}>
-                            <FontAwesome name="home" size={20} color='#fff' />
+                            <FontAwesome name="home" size={20} color='rgba(0, 0, 0, 0.7)' />
                             <Text style={styles.buttonText}>Inicio</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={goToPubñicacionesSreen} style={styles.btnNav}>
-                            <MaterialCommunityIcons name="web-plus" size={24} color='#fff' />
+                            <MaterialCommunityIcons name="web-plus" size={24} color='rgba(0, 0, 0, 0.7)' />
                             <Text style={styles.buttonText}>Publicar</Text>
                         </TouchableOpacity>
 
@@ -104,15 +104,15 @@ export default function Header() {
                         <Text style={styles.text}>Contacto del desarrollador</Text>
                         <View style={styles.social}>
                             <TouchableOpacity onPress={openLinkedInProfile} style={styles.btnNav}>
-                                <FontAwesome name="linkedin" size={20} color="#fff" />
+                                <FontAwesome name="linkedin" size={20} color='rgba(0, 0, 0, 0.7)' />
 
                             </TouchableOpacity>
                             <TouchableOpacity onPress={openWebsite} style={styles.btnNav}>
-                                <FontAwesome name="globe" size={20} color="#fff" />
+                                <FontAwesome name="globe" size={20} color='rgba(0, 0, 0, 0.7)' />
 
                             </TouchableOpacity>
                             <TouchableOpacity onPress={openWhatsAppChat} style={styles.btnNav}>
-                                <FontAwesome name="whatsapp" size={20} color="#fff" />
+                                <FontAwesome name="whatsapp" size={20} color='rgba(0, 0, 0, 0.7)' />
 
                             </TouchableOpacity>
                         </View>
@@ -138,9 +138,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         flexDirection: 'column',
         padding: 10,
-        backgroundColor: '#0D0628',
+        backgroundColor: '#fff',
         paddingTop: 65,
-
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+        elevation: 15,
+        borderRadius: 20
 
     },
 
@@ -167,13 +172,13 @@ const styles = StyleSheet.create({
 
     },
     logoText: {
-        color: '#fff',
+        color: 'rgba(0, 0, 0, 0.7)',
         fontSize: 17,
         fontWeight: 'bold'
 
     },
     dateText: {
-        color: 'rgba(255, 255, 255, 0.8)',
+        color: 'rgba(0, 0, 0, 0.7)',
         fontSize: 13,
         padding: 20
     },
@@ -189,7 +194,7 @@ const styles = StyleSheet.create({
 
     },
     buttonText: {
-        color: '#fff',
+        color: 'rgba(0, 0, 0, 0.7)',
         fontWeight: 'bold',
 
     },
@@ -200,7 +205,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalContent: {
-        backgroundColor: '#0D0628',
+        backgroundColor: '#fff',
 
         overflow: 'hidden',
         width: '80%',
@@ -225,7 +230,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
     },
     closeButtonText: {
-        color: '#fff',
+        color: 'rgba(0, 0, 0, 0.7)',
         fontWeight: 'bold',
     },
     img: {
@@ -256,7 +261,7 @@ const styles = StyleSheet.create({
     text: {
         textAlign: 'center',
         marginTop: 100,
-        color: '#fff',
+        color: 'rgba(0, 0, 0, 0.7)',
     },
     modal: {
         margin: 0
@@ -270,10 +275,10 @@ const styles = StyleSheet.create({
         fontSize: 21,
         fontWeight: 'bold',
         transform: [{ rotate: '90deg' }],
-        color: '#fff',
+        color: 'rgba(0, 0, 0, 0.7)',
     },
     Text: {
-        color: '#fff',
+        color: 'rgba(0, 0, 0, 0.7)',
         padding: 10
     }
 

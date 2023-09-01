@@ -63,11 +63,11 @@ export default function InputSearch() {
                 <View style={styles.modalContainer}>
                     <View style={styles.modaLHeader}>
                         <TouchableOpacity onPress={closeModal}>
-                            <AntDesign name="arrowleft" size={24} color="#fff" />
+                            <AntDesign name="arrowleft" size={24} color="#000" />
                         </TouchableOpacity>
                         <TextInput
                             placeholder="Buscar.."
-                            placeholderTextColor="#ffffff"
+                            placeholderTextColor='rgba(0, 0, 0, 0.6)'
                             style={[styles.inputSearch,]}
                             multiline={true}
                             value={searchTerm}
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     },
     modalContainer: {
         flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        backgroundColor: '#f2f2f2',
     },
     input: {
         backgroundColor: 'rgba(36, 116, 225,0.1)',
@@ -120,11 +120,11 @@ const styles = StyleSheet.create({
         borderRadius: 100
     },
     inputText: {
-        color: 'rgba(255, 255, 255,0.8)',
+        color: 'rgba(0, 0, 0, 0.6)',
     },
     modaLHeader: {
         flexDirection: 'row',
-        backgroundColor: '#0D0628',
+        backgroundColor: '#fff',
 
         alignItems: 'center',
         gap: 10,
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10
     },
     inputSearch: {
-        backgroundColor: 'rgba(36, 116, 225,0.1)',
+        backgroundColor: '#f2f2f2',
         width: '90%',
         padding: 7,
         paddingHorizontal: 20,
@@ -141,11 +141,15 @@ const styles = StyleSheet.create({
     resultItem: {
         paddingHorizontal: 20,
         paddingVertical: 15,
-        borderBottomWidth: 1,
-        borderBottomColor: '#333',
+        borderBottomWidth: 0.2,
+        borderBottomColor: 'rgba(0, 0, 0, 0.2)',
+        flexDirection: 'row',
+        gap: 10,
+        alignItems: 'center'
     },
     resultText: {
-        color: 'white',
+        color: 'rgba(0, 0, 0, 0.7)',
+        fontWeight: 'bold'
     },
     img: {
         width: 40,
@@ -153,7 +157,7 @@ const styles = StyleSheet.create({
         borderRadius: 100
     },
     categoriaPublicacion: {
-        color: 'blue', // Cambia este color a tu preferencia
+        color: 'rgba(0, 0, 0, 0.3)',
     },
     categoriaOtra: {
         color: 'green', // Cambia este color a tu preferencia
