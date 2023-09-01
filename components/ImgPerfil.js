@@ -39,7 +39,7 @@ export default function ImgPerfil() {
 
 
             ) : (
-                <Text>Loading user data...</Text>
+                <Image source={{ uri: 'https://w7.pngwing.com/pngs/247/564/png-transparent-computer-icons-user-profile-user-avatar-blue-heroes-electric-blue-thumbnail.png' }} style={styles.img} />
             )}
         </>
 

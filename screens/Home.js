@@ -13,6 +13,7 @@ import AllPublicaciones from '../components/AllPublicaciones';
 import AllCuentasServer from '../components/AllCuentasServer';
 import HeaderBlanco from '../components/HeaderBlanco';
 import ButonFormPublicacion from '../components/ButonFormPublicacion';
+import AllHistorias from '../components/AllHistorias'
 const windowWidth = Dimensions.get('window').width;
 
 export default function Home() {
@@ -25,9 +26,9 @@ export default function Home() {
             <HeaderBlanco />
             <ScrollView>
                 <ImageBackground style={styles.contenedor}>
+                    <AllHistorias />
 
-
-                    <AllCuentasServer />
+                    {/* <AllCuentasServer /> */}
 
                     <ButonFormPublicacion />
                     <AllPublicaciones />

@@ -6,6 +6,8 @@ import { AntDesign } from '@expo/vector-icons';
 import InputSearch from '../components/InputSearch';
 import { useNavigation } from '@react-navigation/native';
 import AllPublicacionesPerfil from '../components/AllPublicacionesPerfil';
+import LoadingProfile from '../components/LoadingProfile';
+
 export default function PerfilScreen({ route }) {
     const [userData, setUserData] = useState([]);
     const [isLoading, setIsLoading] = useState(true); // State to track loading
@@ -45,7 +47,7 @@ export default function PerfilScreen({ route }) {
     return (
         <View>
             {isLoading ? (
-                <ActivityIndicator style={styles.loadingIndicator} />
+                <LoadingProfile />
             ) : (
                 <View style={styles.container}>
                     <View style={styles.header}>
@@ -59,6 +61,7 @@ export default function PerfilScreen({ route }) {
                         <InputSearch />
                     </View>
                     <ScrollView>
+
                         {userData.map((user, index) => (
                             <View style={styles.profileContainer} key={index}>
                                 <Image source={{ uri: user.banner }} style={styles.banner} />
@@ -85,7 +88,7 @@ const styles = StyleSheet.create({
         marginTop: 200,
     },
     container: {
-        backgroundColor: '#f2f2f2',
+        backgroundColor: '#fff',
         flexDirection: 'column',
 
         paddingTop: 50,

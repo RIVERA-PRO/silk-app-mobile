@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, Text, TouchableOpacity, Dimensions, ImageBackground, Image } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { useNavigation } from '@react-navigation/native';
 export default function PerfilComponent() {
     const [userData, setUserData] = useState(null);
-
+    const navigation = useNavigation();
     useEffect(() => {
         getUserData();
     }, []);
@@ -26,7 +26,14 @@ export default function PerfilComponent() {
 
         <>
             {userData ? (
-                <View style={styles.contenedor}>
+
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('PerfilScreen', { user_id: userData.user_id })}
+                    style={styles.contenedor} >
+
+
+
+
                     <View style={styles.imgBorder}>
                         <Image source={{ uri: userData.photo }} style={styles.img} />
                     </View>
@@ -36,9 +43,11 @@ export default function PerfilComponent() {
                         <Text style={styles.text}>{userData.mail.slice(0, 22)}</Text>
                     </View>
 
-                </View>
+
+                </TouchableOpacity>
+
             ) : (
-                <Text>Loading user data...</Text>
+                <Image source={{ uri: 'https://w7.pngwing.com/pngs/247/564/png-transparent-computer-icons-user-profile-user-avatar-blue-heroes-electric-blue-thumbnail.png' }} style={styles.img} />
             )}
         </>
 

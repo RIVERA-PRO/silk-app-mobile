@@ -7,6 +7,9 @@ import axios from 'axios';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
+
+import LoadingPublicacines from './LoadingPublicacines';
 export default function AllPublicaciones() {
     const [loading, setLoading] = useState(true);
     const [publicacion, setPublicacion] = useState([]);
@@ -18,6 +21,7 @@ export default function AllPublicaciones() {
     const [selectedComments, setSelectedComments] = useState([]);
     const [commentInput, setCommentInput] = useState('');
     const [selectedPublication, setSelectedPublication] = useState(null);
+    const [likes, setLikes] = useState({});
 
     const fetchUsers = () => {
         fetch('https://silk.onrender.com/publicacion', headers)
@@ -26,36 +30,42 @@ export default function AllPublicaciones() {
                 // Invertir el orden de las publicaciones
                 const reversedPublicaciones = data.publicaciones.reverse();
                 setPublicacion(reversedPublicaciones);
-                // Fetch comments for each publication
-                const commentsPromises = reversedPublicaciones.map(pub => (
-                    fetch(`https://silk.onrender.com/comments?chapter_id=${pub._id}`, headers)
-                        .then(response => response.json(
-                            console.log("el id de la publicacion", pub._id)
-
-                        ))
-                ));
-                Promise.all(commentsPromises)
-                    .then(commentsData => {
-                        console.log('Fetched comments data:', commentsData);
-                        const commentsMap = {};
-                        commentsData.forEach((commentsResponse, index) => {
-                            const publicationId = reversedPublicaciones[index]._id;
+                // Fetch comments and likes for each publication
+                const fetchDataPromises = reversedPublicaciones.map(pub => (
+                    Promise.all([
+                        fetch(`https://silk.onrender.com/comments?chapter_id=${pub._id}`, headers)
+                            .then(response => response.json()),
+                        fetch(`https://silk.onrender.com/likes?chapter_id=${pub._id}`, headers)
+                            .then(response => response.json())
+                    ])
+                        .then(([commentsResponse, likesResponse]) => {
+                            const publicationId = pub._id;
                             const comments = commentsResponse.comments.filter(comment => comment.publicacion_id === publicationId);
+                            const likes = likesResponse.likes.filter(like => like.publicacion_id === publicationId);
+                            return { publicationId, comments, likes };
+                        })
+                ));
+
+                Promise.all(fetchDataPromises)
+                    .then(dataArray => {
+                        const commentsMap = {};
+                        const likesMap = {};
+                        dataArray.forEach(({ publicationId, comments, likes }) => {
                             commentsMap[publicationId] = comments;
-                            console.log("estos son los comentarios finales", comments)
+                            likesMap[publicationId] = likes;
                         });
                         setComments(commentsMap);
+                        setLikes(likesMap);
                         setLoading(false);
                     })
                     .catch(error => {
-                        console.error('Error fetching comments:', error);
+                        console.error('Error fetching data:', error);
                     });
-                setLoading(false);
             })
             .catch(error => {
                 console.error('Error al obtener los usuarios:', error);
                 setLoading(false);
-                showErrorAlert();
+                // showErrorAlert();
             });
     };
 
@@ -172,26 +182,114 @@ export default function AllPublicaciones() {
             console.error('Error getting user data:', error);
         }
     };
+
+    const addLikeToPublication = async (publicationId) => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            const headers = {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            };
+
+            // Check if the user has already liked the publication
+            const existingLikes = likes[publicationId] || [];
+            const userHasLiked = existingLikes.some(like => like.user_id._id === userData?.user_id);
+
+            if (userHasLiked) {
+                // User has already liked the publication, send a DELETE request to remove the like
+                const response = await fetch(`https://silk.onrender.com/likes/${publicationId}`, {
+                    method: 'DELETE',
+                    headers,
+                });
+
+                if (!response.ok) {
+                    console.error('Error deleting like:', response.status, response.statusText);
+                    return;
+                }
+
+                // Remove the like from the likes state
+                setLikes(prevLikes => ({
+                    ...prevLikes,
+                    [publicationId]: existingLikes.filter(like => like.user_id !== userData?.user_id),
+                }));
+            } else {
+                // User hasn't liked the publication, send a POST request to add the like
+                const like = {
+                    like: 1, // Set the like property to 1 to indicate a like
+                };
+
+                const response = await fetch(`https://silk.onrender.com/likes?id=${publicationId}`, {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify(like),
+                });
+
+                if (!response.ok) {
+                    console.error('Error creating like:', response.status, response.statusText);
+                    return;
+                }
+
+                // Update the likes state with the new like
+                setLikes(prevLikes => ({
+                    ...prevLikes,
+                    [publicationId]: [...existingLikes, like],
+                }));
+            }
+        } catch (error) {
+            console.error('Error during fetch:', error);
+        }
+    };
+
+    const deletePublication = async (publicationId) => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            const headers = {
+                'Authorization': `Bearer ${token}`,
+            };
+
+            const response = await axios.delete(`https://silk.onrender.com/publicacion/${publicationId}`, {
+                headers: headers,
+            });
+
+            if (response.status !== 200) {
+                console.error('Error deleting publication:', response.status);
+                return;
+            }
+
+            // Actualizar el estado local para reflejar la eliminación
+            setPublicacion(prevPublicaciones => prevPublicaciones.filter(pub => pub._id !== publicationId));
+        } catch (error) {
+            console.error('Error during delete:', error);
+        }
+    };
     return (
         <View style={styles.container}>
             {loading ? (
-                <ActivityIndicator style={styles.loader} size="large" color="#0000ff" />
+                <LoadingPublicacines />
             ) : (
                 <ScrollView>
+
                     {publicacion.map((publicaciones, index) => (
                         <View key={index} style={styles.publicacionCard}>
                             <TouchableOpacity onPress={() => navigateToPerfilScreen(publicaciones.user_id)}>
                                 <View style={styles.deFlexPerfil}>
-                                    <View style={styles.imgBorder}>
-                                        <Image source={{ uri: publicaciones.photo }} style={styles.imgPerfil} />
-                                    </View>
+                                    <View style={styles.deFlexPerfil2}>
+                                        <View style={styles.imgBorder}>
+                                            <Image source={{ uri: publicaciones.photo }} style={styles.imgPerfil} />
+                                        </View>
 
-                                    <View style={styles.deColumnPerfil}>
-                                        <Text style={styles.textName}>{publicaciones.name}</Text>
-                                        <Text style={styles.date}>
-                                            {new Date(publicaciones.createdAt).toLocaleString()}
-                                        </Text>
+                                        <View style={styles.deColumnPerfil}>
+                                            <Text style={styles.textName}>{publicaciones.name.slice(0, 20)}</Text>
+                                            <Text style={styles.date}>
+                                                {new Date(publicaciones.createdAt).toLocaleString()}
+                                            </Text>
+                                        </View>
                                     </View>
+                                    {publicaciones?.user_id === userData?.user_id && (
+                                        <TouchableOpacity onPress={() => deletePublication(publicaciones._id)}>
+                                            <AntDesign name="close" size={18} color="black" />
+                                        </TouchableOpacity>
+                                    )}
                                 </View>
 
 
@@ -201,23 +299,36 @@ export default function AllPublicaciones() {
                                 <Image source={{ uri: publicaciones.cover_photo }} style={styles.imgPublicacion} />
                             ) : null}
 
-                            <TouchableOpacity
-                                onPress={() => {
-                                    setSelectedPublication(publicaciones);
-                                    setSelectedComments(comments[publicaciones._id] || []); // Update the selected comments based on publication's _id
-                                    setModalVisible(true);
-                                }}
-                                style={styles.commentIconBtn}
-                            >
+                            <View style={styles.deFlexComentLike}>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        addLikeToPublication(publicaciones._id); // Call the function to add/remove a like
+                                    }}
+                                    style={styles.commentIconBtn}
+                                >
+                                    <Ionicons name="heart-outline" size={24} color="#1E0C46" />
+                                    <Text style={styles.cantidad}>
+                                        {likes[publicaciones._id]?.length || 0} {/* Display the like count */}
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        setSelectedPublication(publicaciones);
+                                        setSelectedComments(comments[publicaciones._id] || []); // Update the selected comments based on publication's _id
+                                        setModalVisible(true);
+                                    }}
+                                    style={styles.commentIconBtn}
+                                >
 
 
-                                <FontAwesome name="commenting" size={24} color="#1E0C46" />
-                                <Text style={styles.cantidad}>
-                                    {comments[publicaciones._id]?.length || 0} {/* Update the comment count */}
-                                </Text>
-                            </TouchableOpacity>
+                                    <FontAwesome name="commenting" size={24} color="#1E0C46" />
+                                    <Text style={styles.cantidad}>
+                                        {comments[publicaciones._id]?.length || 0} {/* Update the comment count */}
+                                    </Text>
+                                </TouchableOpacity>
 
 
+                            </View>
 
                             <Modal
                                 animationType="slide"
@@ -392,12 +503,26 @@ const styles = StyleSheet.create({
     },
     deFlexPerfil: {
         flexDirection: 'row',
-        gap: 10,
-        alignItems: 'center',
+
         paddingVertical: 10,
         borderBottomWidth: 0.2,
         borderBottomColor: 'rgba(0, 0, 0, 0.2)',
+        justifyContent: 'space-between',
 
+    },
+    deFlexPerfil2: {
+        flexDirection: 'row',
+        gap: 10,
+        alignItems: 'center',
+        backgroundColor: 'rgba(36, 116, 225,0.1)',
+        borderRadius: 30,
+        paddingRight: 15,
+        shadowColor: '#f2f2f2',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+        elevation: 10,
+        height: 43
     },
     imgPublicacion: {
         width: '100%',
@@ -521,6 +646,11 @@ const styles = StyleSheet.create({
     comentariosContain: {
         padding: 10
     },
-
+    deFlexComentLike: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        borderTopColor: 'rgba(0, 0, 0, 0.2)',
+        borderTopWidth: 0.2
+    }
 
 });
